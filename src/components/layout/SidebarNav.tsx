@@ -15,7 +15,8 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ComponentType } from "react";
-import { appRoutes } from "@/lib/rbac";
+import { appRoutes, getRoutesForRole } from "@/lib/rbac";
+import type { UserRole } from "@/types/domain";
 
 const groups = ["System", "Pracownik", "Kadry", "Administracja"] as const;
 
@@ -36,13 +37,20 @@ function isActive(pathname: string, href: string) {
   return pathname === href || (href !== "/dashboard" && pathname.startsWith(`${href}/`));
 }
 
-export function SidebarNav() {
+export function SidebarNav({ role }: { role: UserRole | null }) {
   const pathname = usePathname();
+  const availableRoutes = role
+    ? getRoutesForRole(role)
+    : appRoutes.filter((route) => route.href === "/dashboard");
 
   return (
     <nav className="mt-8 space-y-6">
       {groups.map((group) => {
-        const routes = appRoutes.filter((route) => route.area === group);
+        const routes = availableRoutes.filter((route) => route.area === group);
+
+        if (routes.length === 0) {
+          return null;
+        }
 
         return (
           <div key={group}>

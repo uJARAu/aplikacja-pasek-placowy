@@ -1,5 +1,7 @@
 export type UserRole = "Employee" | "HR" | "Admin";
 
+export type Gender = "Female" | "Male" | "Other";
+
 export type PayrollStatus = "Draft" | "Approved" | "Corrected" | "Cancelled";
 
 export type PayrollComponentType =
@@ -51,6 +53,7 @@ export type User = {
   id: string;
   username: string;
   email: string;
+  demoPassword?: string;
   role: UserRole;
   isActive: boolean;
   mustChangePassword: boolean;
@@ -63,6 +66,8 @@ export type EmployeeProfile = {
   userId: string;
   firstName: string;
   lastName: string;
+  pesel: string;
+  gender: Gender;
   birthDate: string;
   employeeNumber: string;
   employmentDate: string;
